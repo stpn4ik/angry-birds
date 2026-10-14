@@ -1,18 +1,26 @@
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 public class GameSettingsManager : MonoBehaviour
 {
     public AudioSource audioSource;
+    public static GameSettingsManager Instance;
 
     void Awake()
     {
-        Apply();
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
         DontDestroyOnLoad(gameObject);
+        audioSource = Camera.main.GetComponent<AudioSource>();
     }
 
     void Start()
     {
-        audioSource = Camera.main.GetComponent<AudioSource>();
+        Apply();
     }
 
     void Update()
