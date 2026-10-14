@@ -5,10 +5,12 @@ public class SelfDestroy : MonoBehaviour
     public float health;
     private Rigidbody2D rigidbody;
     public static float sensitivity = 0.5f;
+    private GameManager gameManager;
 
     void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
+        gameManager = Object.FindFirstObjectByType<GameManager>();
     }
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -26,6 +28,10 @@ public class SelfDestroy : MonoBehaviour
         }
         if (health <= 0)
         {
+            if (gameObject.tag == "Pig")
+            {
+                gameManager.ChangePigsCount();
+            }
             Destroy(gameObject);
         }
 
