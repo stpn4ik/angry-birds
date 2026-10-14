@@ -22,10 +22,9 @@ public class ThrowBird : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         rb.bodyType = RigidbodyType2D.Kinematic;
-        startPosition = GameObject.Find("Rogatka/StartPosition").transform;
+        startPosition = GameObject.Find("Slingshot/StartPosition").transform;
         animator = GetComponent<Animator>();
         animator.SetBool("isFlying", false);
-        slingshotBand = GetComponent<SlingshotBand>();
     }
 
     void Update()
