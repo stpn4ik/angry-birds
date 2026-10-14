@@ -19,17 +19,28 @@ public class GameManager : MonoBehaviour
     public GameObject settingsMenu;
     public AudioSource audioSource;
     public Slider volumeSlider;
+    private GameObject[] pigs;
+    public int pigsCount;
+    public GameObject winPanel;
+    public GameObject failPanel;
 
     void Start()
     {
         birdIndex = 0;
         LoadBird();
         numText.text = SceneManager.sceneCount.ToString();
+        pigs = GameObject.FindGameObjectsWithTag("Pig");
+        pigsCount = pigs.Length;
     }
 
     void Update()
     {
 
+    }
+
+    public void ChangePigsCount()
+    {
+        pigsCount -= 1;
     }
 
     void LoadBird()
@@ -41,6 +52,7 @@ public class GameManager : MonoBehaviour
         throwBird.InQueue(false);
         currentBird.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
         throwBird.onStopped += HandleBirdStopped;
+        throwBird.slingshotBand.bird = currentBird.transform;
     }
 
     void HandleBirdStopped()
@@ -58,8 +70,19 @@ public class GameManager : MonoBehaviour
             birdIndex += 1;
             LoadBird();
         }
-        else
-            Debug.Log("Level over");
+        else if (pigsCount > 0)
+        {
+            print("Level failed");
+            UIMenu.SetActive(false);
+            failPanel.SetActive(true);
+        }
+        else if (pigsCount <= 0)
+        {
+            print("Level passed");
+            UIMenu.SetActive(false);
+            winPanel.SetActive(true);
+
+        }
     }
 
     public void StartScene()
@@ -117,6 +140,11 @@ public class GameManager : MonoBehaviour
     {
         PlayerPrefs.SetFloat("Volume", volumeSlider.value);
         audioSource.volume = PlayerPrefs.GetFloat("Volume", 1f);
+    }
+
+    public void GoToNextLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
 }
